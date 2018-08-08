@@ -1,0 +1,48 @@
+PROCES POMIAROWY
+					Core()
+					|
+PowerSupportHV<-> Worker() <->Analyzer()
+	|				|			|	
+	N1470()			Report()	BAD1()
+
+Core()->setPowerHV(connection param) -> setAnalyzer(connection param)
+Core()-> setMeasurementParam(tabs time id) -> s. StartMeasurement()
+Worker()-> initHV() & initAnalyzer()
+HV()-> status()
+Analyzer()-> status();
+Worker()->blankVialmeasureemt() -> nextPoint() -> setPoint() -> timeLimit() - >saveRecord()
+Worker()->sourceVialMeasurement() -> nextPoint() -> setPoint() ->Time&countLimit() - >saveRecord()
+Worker() ->finished(status) "Add" Finished Canceled 
+Worker() -<debug info
+
+saveRecord()
+Hour|Vial|Point|Reps|Counters.....|
+	
+Proces pomiarowy:
+class Report(..)
+	
+	- tworzy zbiory do obliczen, 3 pliki: resolving method *TDCR.RT i *4LS.RT i pulse-mixing method *.PM
+	- Tworzenie zbioru *.res -> dla programów z WP
+	- tworzy plik dla napiecia/log/debug: czas i mon V i A *.log
+	- 
+
+class Worker():start
+	-init Analyzer i HV
+outsite
+	-emit showBoxInfo, showBoxQuiestion,showBoxFinished
+	-emit debug()
+	-emit measurmentFinished(QString id, qstring status)
+	-emit recordMeasurementData(data)
+	-emit newRecordMeasure(data)
+
+slot:
+	stop()
+
+ustawianie napiecia
+waitVoltageStable()
+	getVMon
+	getstatus
+	isRmaping()
+	
+
+stan napiecia Volt -> 

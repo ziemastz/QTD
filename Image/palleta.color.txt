@@ -1,0 +1,9 @@
+niebieski #167AC6 hover #126db3 ikony #0e568e
+szary #808080
+szara biel #f1f1f1
+white #ffffff
+black #222222 #333333
+
+line:
+border: 1px solid #ccc; hover #b9b9b9 focus #1c62b9
+box-shadow: inset 0 1px 2px #eee;

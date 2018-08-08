@@ -1,0 +1,41 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/logo.png</file>
+        <file>Image/ncbj_02_poziom_pl_cmyk.png</file>
+        <file>Image/POLATOM.ico</file>
+        <file>Image/qtd_logo7.png</file>
+        <file>Image/QTD.png</file>
+        <file>Image/background_loginDialog.png</file>
+        <file>Image/iconQTD.ico</file>
+        <file>Image/iconQTDcolor.ico</file>
+        <file>Image/iconQTDcolorT.ico</file>
+        <file>Image/iconQTDwhite.ico</file>
+        <file>Image/QTD (2).png</file>
+        <file>Image/QTD (2)small.png</file>
+        <file>Image/3.png</file>
+        <file>Image/logo2.png</file>
+        <file>Image/QTD (3)small.png</file>
+        <file>Image/logoTransparent (2).png</file>
+        <file>Image/logoTransparent.png</file>
+        <file>Image/style.qss</file>
+        <file>Image/down_arrow_disable.png</file>
+        <file>Image/down_arrow_enable.png</file>
+        <file>Image/down_arrow_hover.png</file>
+        <file>Image/down_arrow_pressed.png</file>
+        <file>Image/up_arrow_disable.png</file>
+        <file>Image/up_arrow_enable.png</file>
+        <file>Image/up_arrow_hover.png</file>
+        <file>Image/up_arrow_pressed.png</file>
+        <file>Image/sizegrip.png</file>
+        <file>Image/sizegrip_hover.png</file>
+        <file>Image/left_arrow_disable.png</file>
+        <file>Image/left_arrow_enable.png</file>
+        <file>Image/right_arrow_disable.png</file>
+        <file>Image/right_arrow_enable.png</file>
+    </qresource>
+    <qresource prefix="/Translations">
+        <file>Translations/qtd_pl.qm</file>
+        <file>Translations/qtd_sk.qm</file>
+        <file>Translations/qtd_en.qm</file>
+    </qresource>
+</RCC>
