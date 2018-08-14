@@ -5,7 +5,7 @@ MeasurementWorker::MeasurementWorker(QObject *parent) : QObject(parent)
     isTurnOnHV = true;
     isStoppedCounting = true;
     isChargedHV = false;
-    report = NULL;
+    report = nullptr;
 }
 
 MeasurementWorker::~MeasurementWorker()
@@ -53,9 +53,9 @@ void MeasurementWorker::set(MEASUREMENTDATA measData, SERIESSOURCESDATA seriesDa
     valueUncertaintlyLimited = paramData.valueUncertaintlyLimited;
 
     //report create
-    if(report != NULL) {
+    if(report != nullptr) {
         delete report;
-        report = NULL;
+        report = nullptr;
     }
     report = new Report(measData,seriesData,paramData,location);
     connect(this,SIGNAL(debug(QString)),report,SLOT(debug(QString)));
@@ -111,10 +111,10 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
         return;
     //emit debug("MeasWorker():statusAnalyzer() - Received status");
     statusParameters.resolvingTimeBeta = QString::number(timeCh[CH_RESOLVINGTIMEBETA])+" ns";
-    statusParameters.deadTimeBeta = QString::number((float)timeCh[CH_DEADTIMEBETA]/1000)+" μs";
+    statusParameters.deadTimeBeta = QString::number(static_cast<double>(timeCh[CH_DEADTIMEBETA])/1000)+" μs";
     statusParameters.resolvingTimeGamma = QString::number(timeCh[CH_RESOLVINGTIMEGAMMA])+" ns";
-    statusParameters.deadTimeGamma = QString::number((float)timeCh[CH_DEADTIMEGAMMA]/1000)+" μs";
-    statusParameters.delayTimeBeta = QString::number((float)timeCh[CH_DELAYTIMEBETA]/1000)+" μs";
+    statusParameters.deadTimeGamma = QString::number(static_cast<double>(timeCh[CH_DEADTIMEGAMMA])/1000)+" μs";
+    statusParameters.delayTimeBeta = QString::number(static_cast<double>(timeCh[CH_DELAYTIMEBETA])/1000)+" μs";
     statusParameters.statusAnalyzer = stat;
     emit setStatusParametersMeasurementDialog(statusParameters);
 
@@ -125,24 +125,24 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
     countersStatus = counters;
 
     if(stat == tr("Started") || stat == tr("Stopped")) {
-        statusTrack.cpsA = (double)(counters[PM_A])/((double)(counters[PM_LT_A])/freqClk);
-        statusTrack.cpsB = (double)(counters[PM_B])/((double)(counters[PM_LT_B])/freqClk);
-        statusTrack.cpsC = (double)(counters[PM_C])/((double)(counters[PM_LT_C])/freqClk);
-        statusTrack.cpsG = (double)(counters[PM_G])/((double)(counters[PM_LT_G])/freqClk);
+        statusTrack.cpsA = static_cast<double>(counters[PM_A])/(static_cast<double>(counters[PM_LT_A])/freqClk);
+        statusTrack.cpsB = static_cast<double>(counters[PM_B])/(static_cast<double>(counters[PM_LT_B])/freqClk);
+        statusTrack.cpsC = static_cast<double>(counters[PM_C])/(static_cast<double>(counters[PM_LT_C])/freqClk);
+        statusTrack.cpsG = static_cast<double>(counters[PM_G])/(static_cast<double>(counters[PM_LT_G])/freqClk);
 
-        statusTrack.countsA = (int)(counters[PM_A]);
-        statusTrack.countsB = (int)(counters[PM_B]);
-        statusTrack.countsC = (int)(counters[PM_C]);
-        statusTrack.countsG = (int)(counters[PM_G]);
+        statusTrack.countsA = static_cast<int>(counters[PM_A]);
+        statusTrack.countsB = static_cast<int>(counters[PM_B]);
+        statusTrack.countsC = static_cast<int>(counters[PM_C]);
+        statusTrack.countsG = static_cast<int>(counters[PM_G]);
 
-        statusTrack.deatTimeA = (int)(100 - ((double)(counters[PM_LT_A])*100/(double)counters[MEAS_REAL_TIME]));
-        statusTrack.deatTimeB = (int)(100 - ((double)(counters[PM_LT_B])*100/(double)counters[MEAS_REAL_TIME]));
-        statusTrack.deatTimeC = (int)(100 - ((double)(counters[PM_LT_C])*100/(double)counters[MEAS_REAL_TIME]));
-        statusTrack.deatTimeG = (int)(100 - ((double)(counters[PM_LT_G])*100/(double)counters[MEAS_REAL_TIME]));
+        statusTrack.deatTimeA = static_cast<int>(100 - (static_cast<double>(counters[PM_LT_A])*100/static_cast<double>(counters[MEAS_REAL_TIME])));
+        statusTrack.deatTimeB = static_cast<int>(100 - (static_cast<double>(counters[PM_LT_B])*100/static_cast<double>(counters[MEAS_REAL_TIME])));
+        statusTrack.deatTimeC = static_cast<int>(100 - (static_cast<double>(counters[PM_LT_C])*100/static_cast<double>(counters[MEAS_REAL_TIME])));
+        statusTrack.deatTimeG = static_cast<int>(100 - (static_cast<double>(counters[PM_LT_G])*100/static_cast<double>(counters[MEAS_REAL_TIME])));
 
-        statusTrack.efficiencyTDCR = (int)((double)(counters[TDCR_T])*100/(double)counters[TDCR_D]);
-        statusTrack.efficiencyBeta4LS = (int)((double)(counters[GAMMA_GD])*100/(double)counters[GAMMA_G]);
-        statusTrack.efficiencyGamma4LS = (int)(((double)counters[GAMMA_GD])*100/(double)counters[GAMMA_D]);
+        statusTrack.efficiencyTDCR = static_cast<int>(static_cast<double>(counters[TDCR_T])*100/static_cast<double>(counters[TDCR_D]));
+        statusTrack.efficiencyBeta4LS = static_cast<int>(static_cast<double>(counters[GAMMA_GD])*100/static_cast<double>(counters[GAMMA_G]));
+        statusTrack.efficiencyGamma4LS = static_cast<int>((static_cast<double>(counters[GAMMA_GD]))*100/static_cast<double>(counters[GAMMA_D]));
     }else {
         statusTrack.cpsA = 0;
         statusTrack.cpsB = 0;
@@ -171,28 +171,28 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
     statusProcess.currentSource = currentSource;
 
     if(stat == tr("Stopped")) {
-        emit debug("MeasWorker():statusAnalyzer() - Stopped counting");
-        emit setRTTableMeasurementDialog(generatorRecordRT());
-        emit setPMTableMeasurementDialog(generatorRecordPM());
         if(!isStoppedCounting) {
+            emit debug("MeasWorker():statusAnalyzer() - Stopped counting");
+            emit setRTTableMeasurementDialog(generatorRecordRT());
+            emit setPMTableMeasurementDialog(generatorRecordPM());
             isStoppedCounting = true;
             statusProcess.time = statusProcess.currentTime;
             leftTime = 0;
         }
     }else if(stat == tr("Started")) {
-        statusProcess.currentTime = (int)((float)(counters[MEAS_REAL_TIME])/freqClk);
+        statusProcess.currentTime = static_cast<int>(static_cast<float>(counters[MEAS_REAL_TIME])/freqClk);
         leftTime = 0;
 
         switch(timeLimited) {
         case REAL_TIME:
         {
 
-            if((currentSource == 0 || !isChannelLimited()) && ((int)((float)counters[MEAS_REAL_TIME]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
+            if((currentSource == 0 || !isChannelLimited()) && (static_cast<int>((float)counters[MEAS_REAL_TIME]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
                 emit setCommand(C_STOP);
             }
             if(statusProcess.time <= (currentSource == 0 ? bgTime : soTime)) {
                 statusProcess.time = (currentSource == 0 ? bgTime : soTime);
-                statusProcess.currentTime = (int)((float)(counters[MEAS_REAL_TIME])/freqClk);
+                statusProcess.currentTime = static_cast<int>(static_cast<float>(counters[MEAS_REAL_TIME])/freqClk);
             }
             leftTime = (statusProcess.time - statusProcess.currentTime) + (statusProcess.reps-statusProcess.currentReps)*statusProcess.time + (statusProcess.pointCount - statusProcess.currentPoint)*statusProcess.time*statusProcess.reps;
             if(statusProcess.currentPoint == 0 || statusProcess.currentReps == 0)
@@ -201,19 +201,19 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
         }
         case LIVETIME_BETA:
         {
-            if((currentSource == 0 || !isChannelLimited()) && ((int)((float)counters[TDCR_LT]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
+            if((currentSource == 0 || !isChannelLimited()) && (static_cast<int>((float)counters[TDCR_LT]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
                 emit setCommand(C_STOP);
             }
             if(statusProcess.time <= (currentSource == 0 ? bgTime : soTime)) {
                 statusProcess.time = (currentSource == 0 ? bgTime : soTime);
-                statusProcess.currentTime = (int)((float)(counters[MEAS_REAL_TIME])/freqClk);
+                statusProcess.currentTime = static_cast<int>(static_cast<float>(counters[MEAS_REAL_TIME])/freqClk);
 
                 double corDT = (double)counters[MEAS_REAL_TIME]/(double)counters[TDCR_LT];
-                int liveTime = (int)((double)statusProcess.time * corDT);
+                int liveTime = static_cast<int>((double)statusProcess.time * corDT);
                 statusProcess.time = liveTime;
             }else{
                 double corDT = (double)counters[MEAS_REAL_TIME]/(double)counters[TDCR_LT];
-                int liveTime = (int)((double)(currentSource == 0 ? bgTime : soTime) * corDT);
+                int liveTime = static_cast<int>(static_cast<double>(currentSource == 0 ? bgTime : soTime) * corDT);
                 if(statusProcess.time <= liveTime) {
                     statusProcess.time = liveTime;
                 }
@@ -225,20 +225,20 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
         }
         case LIVETIME_GAMMA:
         {
-            if((currentSource == 0 || !isChannelLimited()) && ((int)((float)counters[GAMMA_LT]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
+            if((currentSource == 0 || !isChannelLimited()) && (static_cast<int>((float)counters[GAMMA_LT]/freqClk) >= (currentSource == 0 ? bgTime : soTime)) ){
                 if(!isChannelLimited() || currentSource == 0)
                     emit setCommand(C_STOP);
             }
             if(statusProcess.time <= (currentSource == 0 ? bgTime : soTime)) {
                 statusProcess.time = (currentSource == 0 ? bgTime : soTime);
-                statusProcess.currentTime = (int)((float)(counters[MEAS_REAL_TIME])/freqClk);
+                statusProcess.currentTime = static_cast<int>(static_cast<float>(counters[MEAS_REAL_TIME])/freqClk);
 
                 double corDT = (double)counters[MEAS_REAL_TIME]/(double)counters[GAMMA_LT];
-                int liveTime = (int)((double)statusProcess.time * corDT);
+                int liveTime = static_cast<int>((double)statusProcess.time * corDT);
                 statusProcess.time = liveTime;
             }else{
                 double corDT = (double)counters[MEAS_REAL_TIME]/(double)counters[GAMMA_LT];
-                int liveTime = (int)((double)(currentSource == 0 ? bgTime : soTime) * corDT);
+                int liveTime = static_cast<int>(static_cast<double>(currentSource == 0 ? bgTime : soTime) * corDT);
                 if(statusProcess.time <= liveTime) {
                     statusProcess.time = liveTime;
                 }
@@ -250,7 +250,7 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
         }
         default:
         {
-            if((int)((float)counters[MEAS_REAL_TIME]/freqClk) >= (currentSource == 0 ? bgTime : soTime)){
+            if(static_cast<int>((float)counters[MEAS_REAL_TIME]/freqClk) >= (currentSource == 0 ? bgTime : soTime)){
                 if(!isChannelLimited() || currentSource == 0)
                     emit setCommand(C_STOP);
             }
@@ -278,6 +278,7 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
             }
 
         }
+
         if(currentPoint!=0){
             if(currentSource == 0) {
                 statusProcess.endMeasurement = QDateTime::currentDateTime().addSecs((maxPoint-currentPoint)*reps*bgTime+(reps-currentReps)*bgTime+(bgTime-statusProcess.currentTime)+masses.count()*soTime*maxPoint*reps);
@@ -595,31 +596,31 @@ QStringList MeasurementWorker::generatorRecordRT()
         << QString::number(currentReps)
         << "";
 
-    ret << QString::number((float)(countersStatus.at(TDCR_AB))/((float)(countersStatus.at(TDCR_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(TDCR_BC))/((float)(countersStatus.at(TDCR_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(TDCR_AC))/((float)(countersStatus.at(TDCR_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(TDCR_T))/((float)(countersStatus.at(TDCR_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(TDCR_D))/((float)(countersStatus.at(TDCR_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(TDCR_T))/(float)(countersStatus.at(TDCR_D)),'f',4)
-        << QString::number((1-((float)(countersStatus.at(TDCR_LT))/(float)(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
+    ret << QString::number(static_cast<double>(countersStatus.at(TDCR_AB))/(static_cast<double>(countersStatus.at(TDCR_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(TDCR_BC))/(static_cast<double>(countersStatus.at(TDCR_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(TDCR_AC))/(static_cast<double>(countersStatus.at(TDCR_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(TDCR_T))/(static_cast<double>(countersStatus.at(TDCR_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(TDCR_D))/(static_cast<double>(countersStatus.at(TDCR_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(TDCR_T))/static_cast<double>(countersStatus.at(TDCR_D)),'f',4)
+        << QString::number((1-(static_cast<double>(countersStatus.at(TDCR_LT))/static_cast<double>(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
         << ""
-        << QString::number((float)(countersStatus.at(GAMMA_G))/((float)(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(GAMMA_T))/((float)(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(GAMMA_D))/((float)(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(GAMMA_GT))/((float)(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(GAMMA_GD))/((float)(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
-        << QString::number((float)(countersStatus.at(GAMMA_GD))/(float)(countersStatus.at(GAMMA_G)),'f',4)
-        << QString::number((float)(countersStatus.at(GAMMA_GT))/(float)(countersStatus.at(GAMMA_G)),'f',4)
-        << QString::number((float)(countersStatus.at(GAMMA_GD))/(float)(countersStatus.at(GAMMA_D)),'f',4)
-        << QString::number((1-((float)(countersStatus.at(GAMMA_LT))/(float)(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_G))/(static_cast<double>(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_T))/(static_cast<double>(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_D))/(static_cast<double>(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_GT))/(static_cast<double>(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_GD))/(static_cast<double>(countersStatus.at(GAMMA_LT))/freqClk),'f',2)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_GD))/static_cast<double>(countersStatus.at(GAMMA_G)),'f',4)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_GT))/static_cast<double>(countersStatus.at(GAMMA_G)),'f',4)
+        << QString::number(static_cast<double>(countersStatus.at(GAMMA_GD))/static_cast<double>(countersStatus.at(GAMMA_D)),'f',4)
+        << QString::number((1-(static_cast<double>(countersStatus.at(GAMMA_LT))/static_cast<double>(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
         << "";
 
-    ret << QString::number(((int)(countersStatus.at(TDCR_A)+countersStatus.at(TDCR_B)+countersStatus.at(TDCR_C))-(int)(countersStatus.at(TDCR_S)+countersStatus.at(TDCR_T)+countersStatus.at(TDCR_D))),'f',0) //Rel.1
-        << QString::number(((int)(countersStatus.at(TDCR_AB)+countersStatus.at(TDCR_BC)+countersStatus.at(TDCR_AC))-(int)(countersStatus.at(TDCR_T)*2+countersStatus.at(TDCR_D))),'f',0) // Rel.2
-        << QString::number((int)(countersStatus.at(GAMMA_A)+countersStatus.at(GAMMA_B)+countersStatus.at(GAMMA_C))-(int)(countersStatus.at(GAMMA_S)+countersStatus.at(GAMMA_T)+countersStatus.at(GAMMA_D)),'f',0) // Rel.3
-        << QString::number((int)((countersStatus.at(GAMMA_A)+countersStatus.at(GAMMA_B)+countersStatus.at(GAMMA_C)+countersStatus.at(GAMMA_G))-(countersStatus.at(GAMMA_COM)+countersStatus.at(GAMMA_GS)+countersStatus.at(GAMMA_D)+countersStatus.at(GAMMA_T))),'f',0) //Rel.4
-        << QString::number((int)((countersStatus.at(GAMMA_G)+countersStatus.at(GAMMA_S))-(countersStatus.at(GAMMA_COM)+countersStatus.at(GAMMA_GS))),'f',0) //Rel.5
-        << QString::number((int)((countersStatus.at(GAMMA_GT)+countersStatus.at(GAMMA_Q))-(countersStatus.at(GAMMA_T)+countersStatus.at(GAMMA_GD))),'f',0)
+    ret << QString::number((static_cast<int>(countersStatus.at(TDCR_A)+countersStatus.at(TDCR_B)+countersStatus.at(TDCR_C))-static_cast<int>(countersStatus.at(TDCR_S)+countersStatus.at(TDCR_T)+countersStatus.at(TDCR_D))),'f',0) //Rel.1
+        << QString::number((static_cast<int>(countersStatus.at(TDCR_AB)+countersStatus.at(TDCR_BC)+countersStatus.at(TDCR_AC))-static_cast<int>(countersStatus.at(TDCR_T)*2+countersStatus.at(TDCR_D))),'f',0) // Rel.2
+        << QString::number(static_cast<int>(countersStatus.at(GAMMA_A)+countersStatus.at(GAMMA_B)+countersStatus.at(GAMMA_C))-static_cast<int>(countersStatus.at(GAMMA_S)+countersStatus.at(GAMMA_T)+countersStatus.at(GAMMA_D)),'f',0) // Rel.3
+        << QString::number(static_cast<int>((countersStatus.at(GAMMA_A)+countersStatus.at(GAMMA_B)+countersStatus.at(GAMMA_C)+countersStatus.at(GAMMA_G))-(countersStatus.at(GAMMA_COM)+countersStatus.at(GAMMA_GS)+countersStatus.at(GAMMA_D)+countersStatus.at(GAMMA_T))),'f',0) //Rel.4
+        << QString::number(static_cast<int>((countersStatus.at(GAMMA_G)+countersStatus.at(GAMMA_S))-(countersStatus.at(GAMMA_COM)+countersStatus.at(GAMMA_GS))),'f',0) //Rel.5
+        << QString::number(static_cast<int>((countersStatus.at(GAMMA_GT)+countersStatus.at(GAMMA_Q))-(countersStatus.at(GAMMA_T)+countersStatus.at(GAMMA_GD))),'f',0)
         << "-";
     for(int i=TDCR_A;i<PM_A;i++)
         ret << QString::number(countersStatus.at(i));
@@ -633,24 +634,24 @@ QStringList MeasurementWorker::generatorRecordPM()
     QStringList ret;
     if(currentPoint == 0)
         return ret;
-    double Na = (double)(countersStatus.at(PM_A))/((double)(countersStatus.at(PM_LT_A))/freqClk);
-    double Nb = (double)(countersStatus.at(PM_B))/((double)(countersStatus.at(PM_LT_B))/freqClk);
-    double Nc = (double)(countersStatus.at(PM_C))/((double)(countersStatus.at(PM_LT_C))/freqClk);
-    double Ng = (double)(countersStatus.at(PM_G))/((double)(countersStatus.at(PM_LT_G))/freqClk);
+    double Na = static_cast<double>(countersStatus.at(PM_A))/(static_cast<double>(countersStatus.at(PM_LT_A))/freqClk);
+    double Nb = static_cast<double>(countersStatus.at(PM_B))/(static_cast<double>(countersStatus.at(PM_LT_B))/freqClk);
+    double Nc = static_cast<double>(countersStatus.at(PM_C))/(static_cast<double>(countersStatus.at(PM_LT_C))/freqClk);
+    double Ng = static_cast<double>(countersStatus.at(PM_G))/(static_cast<double>(countersStatus.at(PM_LT_G))/freqClk);
 
-    double Sab = (double)(countersStatus.at(PM_AB))/((double)(countersStatus.at(PM_LT_AB))/freqClk);
-    double Sbc = (double)(countersStatus.at(PM_BC))/((double)(countersStatus.at(PM_LT_BC))/freqClk);
-    double Sac = (double)(countersStatus.at(PM_AC))/((double)(countersStatus.at(PM_LT_AC))/freqClk);
-    double Sag = (double)(countersStatus.at(PM_AG))/((double)(countersStatus.at(PM_LT_AG))/freqClk);
-    double Sbg = (double)(countersStatus.at(PM_BG))/((double)(countersStatus.at(PM_LT_BG))/freqClk);
-    double Scg = (double)(countersStatus.at(PM_CG))/((double)(countersStatus.at(PM_LT_CG))/freqClk);
+    double Sab = static_cast<double>(countersStatus.at(PM_AB))/(static_cast<double>(countersStatus.at(PM_LT_AB))/freqClk);
+    double Sbc = static_cast<double>(countersStatus.at(PM_BC))/(static_cast<double>(countersStatus.at(PM_LT_BC))/freqClk);
+    double Sac = static_cast<double>(countersStatus.at(PM_AC))/(static_cast<double>(countersStatus.at(PM_LT_AC))/freqClk);
+    double Sag = static_cast<double>(countersStatus.at(PM_AG))/(static_cast<double>(countersStatus.at(PM_LT_AG))/freqClk);
+    double Sbg = static_cast<double>(countersStatus.at(PM_BG))/(static_cast<double>(countersStatus.at(PM_LT_BG))/freqClk);
+    double Scg = static_cast<double>(countersStatus.at(PM_CG))/(static_cast<double>(countersStatus.at(PM_LT_CG))/freqClk);
 
-    double Sabc = (double)(countersStatus.at(PM_ABC))/((double)(countersStatus.at(PM_LT_ABC))/freqClk);
-    double Sabg = (double)(countersStatus.at(PM_ABG))/((double)(countersStatus.at(PM_LT_ABG))/freqClk);
-    double Sbcg = (double)(countersStatus.at(PM_BCG))/((double)(countersStatus.at(PM_LT_BCG))/freqClk);
-    double Sacg = (double)(countersStatus.at(PM_ACG))/((double)(countersStatus.at(PM_LT_ACG))/freqClk);
+    double Sabc = static_cast<double>(countersStatus.at(PM_ABC))/(static_cast<double>(countersStatus.at(PM_LT_ABC))/freqClk);
+    double Sabg = static_cast<double>(countersStatus.at(PM_ABG))/(static_cast<double>(countersStatus.at(PM_LT_ABG))/freqClk);
+    double Sbcg = static_cast<double>(countersStatus.at(PM_BCG))/(static_cast<double>(countersStatus.at(PM_LT_BCG))/freqClk);
+    double Sacg = static_cast<double>(countersStatus.at(PM_ACG))/(static_cast<double>(countersStatus.at(PM_LT_ACG))/freqClk);
 
-    double Sabcg = (double)(countersStatus.at(PM_ABCG))/((double)(countersStatus.at(PM_LT_ABCG))/freqClk);
+    double Sabcg = static_cast<double>(countersStatus.at(PM_ABCG))/(static_cast<double>(countersStatus.at(PM_LT_ABCG))/freqClk);
 
     double Nab = Na + Nb - Sab;
     double Nbc = Nc + Nb - Sbc;
@@ -675,7 +676,7 @@ QStringList MeasurementWorker::generatorRecordPM()
         << QString::number(Nt,'f',2)
         << QString::number(Nd,'f',2)
         << QString::number(Nt/Nd,'f',4)
-        << QString::number((1-((float)(countersStatus.at(PM_LT_ABC))/(float)(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
+        << QString::number((1-(static_cast<double>(countersStatus.at(PM_LT_ABC))/static_cast<double>(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
         << ""
         << QString::number(Ng,'f',2)
         << QString::number(Nt,'f',2)
@@ -685,7 +686,7 @@ QStringList MeasurementWorker::generatorRecordPM()
         << QString::number(Ngd/Ng,'f',4)
         << QString::number(Ngt/Ng,'f',4)
         << QString::number(Ngd/Nd,'f',4)
-        << QString::number((1-((float)(countersStatus.at(PM_LT_ABCG))/(float)(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
+        << QString::number((1-(static_cast<double>(countersStatus.at(PM_LT_ABCG))/static_cast<double>(countersStatus.at(MEAS_REAL_TIME))))*100,'g',2)
         << "";
 
     ret << QString::number(round((Na+Nb+Nc)-(Sabc+Nt+Nd)))
@@ -750,13 +751,13 @@ bool MeasurementWorker::isChannelLimited()
         switch (channelLimited) {
         case D_BETA:
         {
-            if(countersStatus.at(TDCR_D) >= (unsigned long)valueCountLimited)
+            if(countersStatus.at(TDCR_D) >= static_cast<unsigned long>(valueCountLimited))
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
-                double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(TDCR_D);
-                statusProcess.currentTime = (int)mt;
-                statusProcess.time = (int)time;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double time = (mt*static_cast<double>(valueCountLimited))/static_cast<double>(countersStatus.at(TDCR_D));
+                statusProcess.currentTime = static_cast<int>(mt);
+                statusProcess.time = static_cast<int>(time);
                 return true;
             }
         }
@@ -765,8 +766,8 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(TDCR_T) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
-                double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(TDCR_T);
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double time = (mt*static_cast<double>(valueCountLimited))/static_cast<double>(countersStatus.at(TDCR_T));
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
                 return true;
@@ -777,8 +778,8 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(TDCR_S) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
-                double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(TDCR_S);
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double time = (mt*static_cast<double>(valueCountLimited))/static_cast<double>(countersStatus.at(TDCR_S));
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
                 return true;
@@ -789,7 +790,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_G) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_G);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -801,7 +802,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_COM) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_COM);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -813,7 +814,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_D) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_D);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -825,7 +826,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_T) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_T);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -837,7 +838,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_S) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_S);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -849,7 +850,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_GD) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_GD);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -861,7 +862,7 @@ bool MeasurementWorker::isChannelLimited()
             if(countersStatus.at(GAMMA_GT) >= (unsigned long)valueCountLimited)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(double)valueCountLimited)/(double)countersStatus.at(GAMMA_GT);
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -879,7 +880,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -892,7 +893,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -905,7 +906,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -920,7 +921,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -933,7 +934,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -946,7 +947,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -959,7 +960,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -972,7 +973,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -985,7 +986,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -998,7 +999,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -1011,7 +1012,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -1027,7 +1028,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;
@@ -1043,7 +1044,7 @@ bool MeasurementWorker::isChannelLimited()
             if( uncer <= valueUncertaintlyLimited/100)
                 return false;
             else {
-                double mt = (double)(countersStatus.at(MEAS_REAL_TIME))/freqClk;
+                double mt = static_cast<double>(countersStatus.at(MEAS_REAL_TIME))/freqClk;
                 double time = (mt*(valueUncertaintlyLimited/100))/uncer;
                 statusProcess.currentTime = (int)mt;
                 statusProcess.time = (int)time;

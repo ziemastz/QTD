@@ -2159,7 +2159,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Ampere (μA)</string>
+            <string>Current (μA)</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignBottom|Qt::AlignHCenter</set>
