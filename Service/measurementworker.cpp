@@ -166,9 +166,6 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
 
     emit setStatusTrackMeasurementDialog(statusTrack);
 
-    statusProcess.currentPoint = currentPoint;
-    statusProcess.currentReps = currentReps;
-    statusProcess.currentSource = currentSource;
 
     if(stat == tr("Stopped")) {
         if(!isStoppedCounting) {
@@ -180,6 +177,9 @@ void MeasurementWorker::statusAnalyzer(QString stat, QVector<int> timeCh, QVecto
             leftTime = 0;
         }
     }else if(stat == tr("Started")) {
+        statusProcess.currentPoint = currentPoint;
+        statusProcess.currentReps = currentReps;
+        statusProcess.currentSource = currentSource;
         statusProcess.currentTime = static_cast<int>(static_cast<float>(counters[MEAS_REAL_TIME])/freqClk);
         leftTime = 0;
 

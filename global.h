@@ -161,7 +161,7 @@
 #define STATUS_DELETED 3
 
 
-const int freqClk = 6000;
+const int freqClk = 1000;
 const QString formatDate = "yyyy-MM-dd";
 const QString formatTime = "hh:mm:ss";
 
